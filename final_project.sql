@@ -18,6 +18,7 @@
 --
 -- Table structure for table `Application`
 --
+USE final_project;
 
 DROP TABLE IF EXISTS `Application`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
@@ -32,12 +33,12 @@ CREATE TABLE `Application` (
   `Time` datetime NOT NULL,
   `PS` text,
   PRIMARY KEY (`AID`),
-  KEY `ItemID` (`ItemID`),
-  KEY `UID1` (`UID1`),
-  KEY `UID2` (`UID2`),
-  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`ItemID`) REFERENCES `Item` (`ItemID`),
-  CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UID1`) REFERENCES `User` (`UID`),
-  CONSTRAINT `application_ibfk_3` FOREIGN KEY (`UID2`) REFERENCES `User` (`UID`)
+  KEY `application_ibfk_1` (`ItemID`),
+  KEY `application_ibfk_2` (`UID1`),
+  KEY `application_ibfk_3` (`UID2`),
+  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`ItemID`) REFERENCES `Item` (`ItemID`) ON DELETE CASCADE,
+  CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UID1`) REFERENCES `User` (`UID`) ON DELETE CASCADE,
+  CONSTRAINT `application_ibfk_3` FOREIGN KEY (`UID2`) REFERENCES `User` (`UID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -64,8 +65,8 @@ CREATE TABLE `Item` (
   `ItemStatue` enum('使用中','備用中','維修中') NOT NULL,
   `LID` varchar(10) NOT NULL,
   PRIMARY KEY (`ItemID`),
-  KEY `LID` (`LID`),
-  CONSTRAINT `item_ibfk_1` FOREIGN KEY (`LID`) REFERENCES `Location` (`LID`)
+  KEY `item_ibfk_1` (`LID`),
+  CONSTRAINT `item_ibfk_1` FOREIGN KEY (`LID`) REFERENCES `Location` (`LID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -140,8 +141,8 @@ CREATE TABLE `User` (
   `UName` varchar(50) NOT NULL,
   `Password` varchar(255) NOT NULL,
   PRIMARY KEY (`UID`),
-  KEY `TID` (`TID`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`TID`) REFERENCES `Type` (`TID`)
+  KEY `user_ibfk_1` (`TID`),
+  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`TID`) REFERENCES `Type` (`TID`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -164,4 +165,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-20 11:41:11
+-- Dump completed on 2024-12-23 17:46:02
