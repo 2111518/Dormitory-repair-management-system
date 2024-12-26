@@ -1,0 +1,100 @@
+/*整體樣式*/
+html {
+	height: 100%;
+}
+
+/*網頁排版*/
+#layout {
+	width: 99%;
+	height: 100%;
+	margin: auto;
+}
+
+
+/*自動換行*/
+div {
+	word-wrap: break-word;
+	word-break: normal;
+	user-select:none;
+}
+
+.header {
+	height: 50px;
+	position: absolute;
+	margin-top: 5px;
+	z-index: 900;
+}
+
+#headerimg:hover {
+	opacity: 0.8;
+}
+
+img.animated-gif {
+	width: 175px;
+	height: auto;
+}
+
+
+/*標題樣式*/
+/* h2 {
+	text-align: center;
+	color: black;
+	font-size: 30px;
+	font-family: DFKai-sb;
+	border-radius: 3px;
+} */
+
+.btn {
+	background-color: #203057;
+	font-size: 20px;
+	font-family: DFKai-sb;
+	color: white;
+	height: 40px;
+	width: 150px;
+	border-radius: 3px;
+	user-select:none;
+}
+
+.btn:hover {
+	background-color: #fff;
+	border: 2px #203057 solid;
+	color: #203057;
+} 
+
+.bbtn{
+	background-color:#203057;
+	font-size:24px;
+	font-family:DFKai-sb;
+	color:white;
+    height:50px;
+	width:250px;
+	border-radius:3px;
+}
+
+.bbtn:hover{
+	background-color: #fff;
+	border: 2px #203057 solid;
+	color:#203057;
+}
+
+.inbtn {
+	background-color: white;
+	font-size: 20px;
+	font-family: DFKai-sb;
+	color: #203057;
+	height: 40px;
+	width: 150px;
+	border-radius: 3px;
+	user-select:none;
+}
+
+.inbtn:hover {
+	background-color: #203057;
+	border: 2px #203057 solid;
+	color: white;
+} 
+
+ul li {
+	list-style-type: none;
+	user-select:none;
+}
