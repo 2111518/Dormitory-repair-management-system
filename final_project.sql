@@ -1,168 +1,206 @@
--- MySQL dump 10.13  Distrib 8.0.38, for macos14 (arm64)
+-- phpMyAdmin SQL Dump
+-- version 5.2.0
+-- https://www.phpmyadmin.net/
 --
--- Host: 127.0.0.1    Database: final_project
--- ------------------------------------------------------
--- Server version	8.0.39
+-- 主機： localhost:3307
+-- 產生時間： 2024-12-26 07:55:14
+-- 伺服器版本： 10.4.25-MariaDB
+-- PHP 版本： 7.4.30
+
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+START TRANSACTION;
+SET time_zone = "+00:00";
+
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!50503 SET NAMES utf8 */;
-/*!40103 SET @OLD_TIME_ZONE=@@TIME_ZONE */;
-/*!40103 SET TIME_ZONE='+00:00' */;
-/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- Table structure for table `Application`
---
-USE final_project;
-
-DROP TABLE IF EXISTS `Application`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Application` (
-  `AID` varchar(10) NOT NULL,
-  `ItemID` varchar(10) NOT NULL,
-  `UID1` varchar(10) NOT NULL,
-  `Reason` text NOT NULL,
-  `AStatue` enum('未審核','採購中','維修中','已完成') NOT NULL,
-  `UID2` varchar(10) DEFAULT NULL,
-  `Time` datetime NOT NULL,
-  `PS` text,
-  PRIMARY KEY (`AID`),
-  KEY `application_ibfk_1` (`ItemID`),
-  KEY `application_ibfk_2` (`UID1`),
-  KEY `application_ibfk_3` (`UID2`),
-  CONSTRAINT `application_ibfk_1` FOREIGN KEY (`ItemID`) REFERENCES `Item` (`ItemID`) ON DELETE CASCADE,
-  CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UID1`) REFERENCES `User` (`UID`) ON DELETE CASCADE,
-  CONSTRAINT `application_ibfk_3` FOREIGN KEY (`UID2`) REFERENCES `User` (`UID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `Application`
+-- 資料庫： `final_project`
 --
 
-LOCK TABLES `Application` WRITE;
-/*!40000 ALTER TABLE `Application` DISABLE KEYS */;
-INSERT INTO `Application` VALUES ('aid001','item003','uid001','腳斷了','未審核','uid002','2024-12-14 00:00:00','NAN');
-/*!40000 ALTER TABLE `Application` ENABLE KEYS */;
-UNLOCK TABLES;
+-- --------------------------------------------------------
 
 --
--- Table structure for table `Item`
+-- 資料表結構 `application`
 --
 
-DROP TABLE IF EXISTS `Item`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Item` (
-  `ItemID` varchar(10) NOT NULL,
-  `ItemName` varchar(50) NOT NULL,
-  `ItemStatue` enum('使用中','備用中','維修中') NOT NULL,
-  `LID` varchar(10) NOT NULL,
-  PRIMARY KEY (`ItemID`),
-  KEY `item_ibfk_1` (`LID`),
-  CONSTRAINT `item_ibfk_1` FOREIGN KEY (`LID`) REFERENCES `Location` (`LID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `application` (
+  `AID` int(10) NOT NULL,
+  `ItemID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `UID1` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `Reason` text COLLATE utf8_unicode_ci NOT NULL,
+  `AStatue` enum('未審核','採購中','維修中','已完成') COLLATE utf8_unicode_ci NOT NULL,
+  `UID2` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `Time` datetime NOT NULL DEFAULT current_timestamp(),
+  `PS` text COLLATE utf8_unicode_ci DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `Item`
+-- 傾印資料表的資料 `application`
 --
 
-LOCK TABLES `Item` WRITE;
-/*!40000 ALTER TABLE `Item` DISABLE KEYS */;
-INSERT INTO `Item` VALUES ('item001','椅子','使用中','loc001'),('item002','椅子','備用中','loc002'),('item003','床','維修中','loc002');
-/*!40000 ALTER TABLE `Item` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `application` (`AID`, `ItemID`, `UID1`, `Reason`, `AStatue`, `UID2`, `Time`, `PS`) VALUES
+(1, 'item003', 'uid001', '腳斷了', '未審核', 'uid002', '2024-12-14 00:00:00', 'NAN');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `Location`
+-- 資料表結構 `item`
 --
 
-DROP TABLE IF EXISTS `Location`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Location` (
-  `LID` varchar(10) NOT NULL,
-  `LName` varchar(50) NOT NULL,
-  PRIMARY KEY (`LID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `item` (
+  `ItemID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `ItemName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `ItemStatue` enum('使用中','備用中','維修中') COLLATE utf8_unicode_ci NOT NULL,
+  `LID` varchar(10) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `Location`
+-- 傾印資料表的資料 `item`
 --
 
-LOCK TABLES `Location` WRITE;
-/*!40000 ALTER TABLE `Location` DISABLE KEYS */;
-INSERT INTO `Location` VALUES ('loc001','301room'),('loc002','depot');
-/*!40000 ALTER TABLE `Location` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `item` (`ItemID`, `ItemName`, `ItemStatue`, `LID`) VALUES
+('item001', '椅子', '使用中', 'loc001'),
+('item002', '椅子', '備用中', 'loc002'),
+('item003', '床', '維修中', 'loc002');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `Type`
+-- 資料表結構 `location`
 --
 
-DROP TABLE IF EXISTS `Type`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `Type` (
-  `TID` varchar(10) NOT NULL,
-  `TypeName` varchar(20) NOT NULL,
-  PRIMARY KEY (`TID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `location` (
+  `LID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `LName` varchar(50) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `Type`
+-- 傾印資料表的資料 `location`
 --
 
-LOCK TABLES `Type` WRITE;
-/*!40000 ALTER TABLE `Type` DISABLE KEYS */;
-INSERT INTO `Type` VALUES ('tid001','student'),('tid002','admin');
-/*!40000 ALTER TABLE `Type` ENABLE KEYS */;
-UNLOCK TABLES;
+INSERT INTO `location` (`LID`, `LName`) VALUES
+('loc001', '301room'),
+('loc002', 'depot');
+
+-- --------------------------------------------------------
 
 --
--- Table structure for table `User`
+-- 資料表結構 `type`
 --
 
-DROP TABLE IF EXISTS `User`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `User` (
-  `UID` varchar(10) NOT NULL,
-  `TID` varchar(10) NOT NULL,
-  `UName` varchar(50) NOT NULL,
-  `Password` varchar(255) NOT NULL,
-  PRIMARY KEY (`UID`),
-  KEY `user_ibfk_1` (`TID`),
-  CONSTRAINT `user_ibfk_1` FOREIGN KEY (`TID`) REFERENCES `Type` (`TID`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+CREATE TABLE `type` (
+  `TID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `TypeName` varchar(20) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
--- Dumping data for table `User`
+-- 傾印資料表的資料 `type`
 --
 
-LOCK TABLES `User` WRITE;
-/*!40000 ALTER TABLE `User` DISABLE KEYS */;
-INSERT INTO `User` VALUES ('uid001','tid001','student_1','1111'),('uid002','tid002','admin_1','2222');
-/*!40000 ALTER TABLE `User` ENABLE KEYS */;
-UNLOCK TABLES;
-/*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
+INSERT INTO `type` (`TID`, `TypeName`) VALUES
+('tid001', 'student'),
+('tid002', 'admin');
 
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+-- --------------------------------------------------------
+
+--
+-- 資料表結構 `user`
+--
+
+CREATE TABLE `user` (
+  `UID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `TID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `UName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `Password` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `Account` char(9) COLLATE utf8_unicode_ci NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- 傾印資料表的資料 `user`
+--
+
+INSERT INTO `user` (`UID`, `TID`, `UName`, `Password`, `Account`) VALUES
+('uid001', 'tid001', '王曉明', '1111', '113753208'),
+('uid002', 'tid002', '林淑芬', '2222', '113753209');
+
+--
+-- 已傾印資料表的索引
+--
+
+--
+-- 資料表索引 `application`
+--
+ALTER TABLE `application`
+  ADD PRIMARY KEY (`AID`),
+  ADD KEY `ItemID` (`ItemID`),
+  ADD KEY `UID1` (`UID1`),
+  ADD KEY `UID2` (`UID2`);
+
+--
+-- 資料表索引 `item`
+--
+ALTER TABLE `item`
+  ADD PRIMARY KEY (`ItemID`),
+  ADD KEY `LID` (`LID`);
+
+--
+-- 資料表索引 `location`
+--
+ALTER TABLE `location`
+  ADD PRIMARY KEY (`LID`);
+
+--
+-- 資料表索引 `type`
+--
+ALTER TABLE `type`
+  ADD PRIMARY KEY (`TID`);
+
+--
+-- 資料表索引 `user`
+--
+ALTER TABLE `user`
+  ADD PRIMARY KEY (`UID`),
+  ADD KEY `TID` (`TID`);
+
+--
+-- 在傾印的資料表使用自動遞增(AUTO_INCREMENT)
+--
+
+--
+-- 使用資料表自動遞增(AUTO_INCREMENT) `application`
+--
+ALTER TABLE `application`
+  MODIFY `AID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- 已傾印資料表的限制式
+--
+
+--
+-- 資料表的限制式 `application`
+--
+ALTER TABLE `application`
+  ADD CONSTRAINT `application_ibfk_1` FOREIGN KEY (`ItemID`) REFERENCES `item` (`ItemID`),
+  ADD CONSTRAINT `application_ibfk_2` FOREIGN KEY (`UID1`) REFERENCES `user` (`UID`),
+  ADD CONSTRAINT `application_ibfk_3` FOREIGN KEY (`UID2`) REFERENCES `user` (`UID`);
+
+--
+-- 資料表的限制式 `item`
+--
+ALTER TABLE `item`
+  ADD CONSTRAINT `item_ibfk_1` FOREIGN KEY (`LID`) REFERENCES `location` (`LID`);
+
+--
+-- 資料表的限制式 `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `user_ibfk_1` FOREIGN KEY (`TID`) REFERENCES `type` (`TID`);
+COMMIT;
+
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-
--- Dump completed on 2024-12-23 17:46:02
