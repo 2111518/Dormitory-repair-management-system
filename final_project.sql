@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- 主機： localhost:3307
--- 產生時間： 2024-12-26 07:55:14
+-- 產生時間： 2024-12-26 19:16:28
 -- 伺服器版本： 10.4.25-MariaDB
 -- PHP 版本： 7.4.30
 
@@ -32,8 +32,8 @@ CREATE TABLE `application` (
   `ItemID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `UID1` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `Reason` text COLLATE utf8_unicode_ci NOT NULL,
-  `AStatue` enum('未審核','採購中','維修中','已完成') COLLATE utf8_unicode_ci NOT NULL,
-  `UID2` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `AState` enum('未審核','採購中','維修中','已完成') COLLATE utf8_unicode_ci NOT NULL,
+  `UID2` varchar(10) COLLATE utf8_unicode_ci DEFAULT 'uid003',
   `Time` datetime NOT NULL DEFAULT current_timestamp(),
   `PS` text COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -42,8 +42,13 @@ CREATE TABLE `application` (
 -- 傾印資料表的資料 `application`
 --
 
-INSERT INTO `application` (`AID`, `ItemID`, `UID1`, `Reason`, `AStatue`, `UID2`, `Time`, `PS`) VALUES
-(1, 'item003', 'uid001', '腳斷了', '未審核', 'uid002', '2024-12-14 00:00:00', 'NAN');
+INSERT INTO `application` (`AID`, `ItemID`, `UID1`, `Reason`, `AState`, `UID2`, `Time`, `PS`) VALUES
+(1, 'item003', 'uid001', '腳斷了', '維修中', 'uid002', '2024-12-14 00:00:00', '2'),
+(2, 'item004', 'uid001', 'test', '已完成', 'uid002', '2024-12-27 00:28:02', 'TEST'),
+(3, 'item006', 'uid001', '', '採購中', 'uid003', '2024-12-27 00:33:29', NULL),
+(5, 'item007', 'uid001', 'test2', '維修中', 'uid002', '2024-12-27 01:08:02', NULL),
+(6, 'item008', 'uid001', '', '未審核', 'uid002', '2024-12-27 01:52:22', '狀態'),
+(7, 'item004', 'uid001', '', '未審核', 'uid003', '2024-12-27 02:14:46', NULL);
 
 -- --------------------------------------------------------
 
@@ -54,7 +59,7 @@ INSERT INTO `application` (`AID`, `ItemID`, `UID1`, `Reason`, `AStatue`, `UID2`,
 CREATE TABLE `item` (
   `ItemID` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
   `ItemName` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `ItemStatue` enum('使用中','備用中','維修中') COLLATE utf8_unicode_ci NOT NULL,
+  `ItemState` enum('使用中','備用中','維修中') COLLATE utf8_unicode_ci NOT NULL,
   `LID` varchar(10) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -62,10 +67,14 @@ CREATE TABLE `item` (
 -- 傾印資料表的資料 `item`
 --
 
-INSERT INTO `item` (`ItemID`, `ItemName`, `ItemStatue`, `LID`) VALUES
-('item001', '椅子', '使用中', 'loc001'),
+INSERT INTO `item` (`ItemID`, `ItemName`, `ItemState`, `LID`) VALUES
 ('item002', '椅子', '備用中', 'loc002'),
-('item003', '床', '維修中', 'loc002');
+('item003', '床', '維修中', 'loc002'),
+('item004', '床', '使用中', 'loc003'),
+('item005', '床', '使用中', 'loc004'),
+('item006', '椅子', '使用中', 'loc003'),
+('item007', '椅子', '維修中', 'loc004'),
+('item008', '桌子', '使用中', 'loc004');
 
 -- --------------------------------------------------------
 
@@ -84,7 +93,9 @@ CREATE TABLE `location` (
 
 INSERT INTO `location` (`LID`, `LName`) VALUES
 ('loc001', '301room'),
-('loc002', 'depot');
+('loc002', 'depot'),
+('loc003', '302room'),
+('loc004', '303room');
 
 -- --------------------------------------------------------
 
@@ -125,7 +136,8 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`UID`, `TID`, `UName`, `Password`, `Account`) VALUES
 ('uid001', 'tid001', '王曉明', '1111', '113753208'),
-('uid002', 'tid002', '林淑芬', '2222', '113753209');
+('uid002', 'tid002', '林淑芬', '2222', '113753209'),
+('uid003', 'tid002', '野原新', '2222', '113753210');
 
 --
 -- 已傾印資料表的索引
@@ -145,6 +157,7 @@ ALTER TABLE `application`
 --
 ALTER TABLE `item`
   ADD PRIMARY KEY (`ItemID`),
+  ADD UNIQUE KEY `ItemID` (`ItemID`),
   ADD KEY `LID` (`LID`);
 
 --
@@ -164,6 +177,7 @@ ALTER TABLE `type`
 --
 ALTER TABLE `user`
   ADD PRIMARY KEY (`UID`),
+  ADD UNIQUE KEY `UID` (`UID`,`Account`),
   ADD KEY `TID` (`TID`);
 
 --
@@ -174,7 +188,7 @@ ALTER TABLE `user`
 -- 使用資料表自動遞增(AUTO_INCREMENT) `application`
 --
 ALTER TABLE `application`
-  MODIFY `AID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `AID` int(10) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- 已傾印資料表的限制式
