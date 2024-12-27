@@ -131,7 +131,7 @@ include_once('../mysql_connect.php');
                     align="center">
                     <thead>
                         <tr>
-                            <th scope="col">編號</th>
+                            <th scope="col">NO.</th>
                             <th scope="col">物品編號</th>
                             <th scope="col">物品名稱</th>
                             <th scope="col">申請原因</th>

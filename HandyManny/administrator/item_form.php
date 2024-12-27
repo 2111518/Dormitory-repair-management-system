@@ -51,56 +51,30 @@ include_once('../mysql_connect.php');
             ?>&nbsp;
         </div>
     </div>
+    
 
     <!--線-->
     <hr style="height:3px; margin-top:0px;">
+    
+    <!-- 路徑欄 -->
+    <nav style="--bs-breadcrumb-divider: '>'; margin-left:10px; margin-top:-10px;" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="reader_index.php"
+                    style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:20px; text-decoration:none; user-select:none;">首頁</a>
+            </li>
+            <li class="breadcrumb-item"><a href="item_management.php" 
+                style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:20px; text-decoration:none; user-select:none;">物品清單管理</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page"
+                style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:20px; user-select:none;">
+                新增物品</li>
+        </ol>
+    </nav>
 
     <!--左邊區塊-->
     <div style="float:left; height:150%; width:35%;">
 
-        <br>
-
-        <!--通知欄-->
-        <div style="text-align:center;">
-            <p style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:32px; margin-top:10px;">通 知 欄</p>
-            <div align="center"
-                style=" width:505px; height:450px; overflow-y:scroll; /*縱向滾動條始終顯示*/ overflow-x:none; margin-left:15px;">
-                <table
-                    style="color:black; background-color:white; font-family:Times New Roman,'DFKai-sb'; font-size:18px; width:480px; height:450px;">
-                    <?php
-                    $sql = "SELECT `ItemName`, `AState` 
-                        FROM `application`
-                        JOIN `item` ON `application`.`ItemID` = `item`.`ItemID`
-                        WHERE `UID1` = '" . $_SESSION['uid'] . "' 
-                        AND `AState` IN ('未審核', '採購中', '維修中')
-                        ORDER BY `Time` DESC;";
-                    $result = mysqli_query($con, $sql);
-                    $num = $con->query($sql);
-                    if ($num) {
-                        $total = mysqli_num_rows($num);
-                    }
-                    while ($application = mysqli_fetch_array($result)) {
-                        echo "<tr>";
-                        echo "<th style='width:20%;'>申請物品：</th>";
-                        echo "<td>" . $application['ItemName'] . "</td>";
-                        echo "</tr>";
-
-                        echo "<tr>";
-                        echo "<th style='width:20%;'>申請狀況：</th>";
-                        echo "<td >" . $application['AState'] ."</td>";
-                        echo "</tr>";
-
-                        echo "<tr> <td>-</td> </tr>";
-                    }
-                    if ($total == 0) {
-                        echo "<tr> <td style='height:450px;text-align: center;'>尚未推薦書刊</td> </tr>";
-                    }
-                    ?>
-                </table>
-            </div>
-        </div>
-
-        <br>
+        <img src="../imgs/fix.png" style="float:left; width:90%; margin-left:3%; margin-top:30%;">
 
     </div>
 
@@ -117,33 +91,41 @@ include_once('../mysql_connect.php');
 
         </br></br>
 
-        <h2 style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size: 40px; margin-left:41%">報  修  申  請&emsp;&emsp;
+        <h2 style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size: 40px; margin-left:41%">新  增  物  品&emsp;&emsp;
             <span style="color:red; font-family:Times New Roman,'DFKai-sb'; font-size:18.5px;"><b>＊為必填</b></span>
         </h2>
         
         <br>
 
         <div style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:24px; float:left; margin-left:28%">
-            <form method="post" action="application_judge.php" id="subform">
-                <!-- 編號欄位 -->
+            <form method="post" action="item_judge.php" id="subform">
+                <!-- 物品編號 -->
                 <label for="ItemID"><span style="color:red;">＊</span>物品編號：</label>
                 <input type="text" style="width:320px;" id="ItemID" name="ItemID" required autocomplete="off"
                     onchange="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')"><br><br>
-                <!-- 理由欄位 -->
-                <label for="Reason">報修原因：</label><br>
-                <textarea id="Reason" style="width:483px; height:200px; resize:none;" name="Reason" autocomplete="off"
-                    onchange="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')"></textarea><br>
-                <br><br>
+                <!-- 物品名稱 -->
+                <label for="ItemName"><span style="color:red;">＊</span>物品名稱：</label>
+                <input type="text" style="width:320px;" id="ItemName" name="ItemName" required autocomplete="off"
+                    onchange="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')"><br><br>
+                <!-- 物品狀態 -->
+                <label for="ItemState"><span style="color:red;">＊</span>物品狀態：</label>
+                <input type="radio" name="ItemState" value="使用中" CHECKED>使用中
+                <input type="radio" name="ItemState" value="備用中">備用中<br><br>
+                <!-- 物品存放地點 -->
+                <label for="LID"><span style="color:red;">＊</span>存放地點：</label>
+                <input type="text" style="width:320px;" id="LID" name="LID" required autocomplete="off"
+                    onchange="value=value.replace(/[^\a-\z\A-\Z0-9\u4E00-\u9FA5]/g,'')"><br><br>
                 <!-- 送出按鈕 -->
                 <p style="text-align:center;">
                     <button
                         style="background-color:#203057;font-size:20px; font-family:DFKai-sb; color:white; height:40px; width:150px; border-radius:3px;"
                         name="send" onclick="sub(); chk_if_exist();">送出</button>
+                    <input class="btn" type="button" id="back" value="返回" onclick="location.href = 'item_management.php'" />
                 </p>
             </form>
             <script>
                 function sub() {
-                    var mas = "是否確認申請此物品？";
+                    var mas = "是否新增此物品？";
                     var agree_yn = document.getElementById('denyYN');
                     if (agree_yn.checked) {
                         if (confirm(mas) == true) {

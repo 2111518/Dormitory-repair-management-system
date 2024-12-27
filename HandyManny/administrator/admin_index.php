@@ -73,78 +73,44 @@ include_once('../mysql_connect.php');
             <div align="center"
                 style=" width:505px; height:450px; overflow-y:scroll; /*縱向滾動條始終顯示*/ overflow-x:none; margin-left:15px;">
                 <table
-                    style="color:black; background-color:white; font-family:Times New Roman,'DFKai-sb'; font-size:18px; width:480px;">
+                    style="color:black; background-color:white; font-family:Times New Roman,'DFKai-sb'; font-size:18px; width:480px; height:450px;">
                     <?php
-                    $sql = "SELECT `name`,`book` FROM `hrec_ceb` where `situation`='待處理' and `empty`='否' ORDER BY date desc;";
+                    $sql = "SELECT `applicant`.`UName` AS `ApplicantName`,
+                                    `item`.`ItemName` AS item_name, 
+                                    `Time`
+                            FROM `application` 
+                            JOIN `user` AS applicant ON `application`.`UID1` = `applicant`.`UID`
+                            JOIN `item` ON `application`.`ItemID` = `item`.`ItemID`
+                            where `AState`='未審核' ORDER BY Time desc;";
                     $result = mysqli_query($con, $sql);
                     $num = $con->query($sql);
                     if ($num) {
                         $total = mysqli_num_rows($num);
                     }
                     if ($total >= 1) {
-                        echo "<tr> <th style='color:#FF5151'>中西文圖書</th> </tr>";
+                        echo "<tr> <th style='color:#FF5151'>最新申請</th> </tr>";
                     }
-                    while ($hrec_ceb = mysqli_fetch_array($result)) {
+                    else{
+                        echo "<tr> <td style='height:450px;text-align: center;'>目前已無待處理申請</td> </tr>";
+                    }
+
+                    while ($application = mysqli_fetch_array($result)) {
                         echo "<tr>";
-                        echo "<th style='width:20%;'>推薦人：</th>";
-                        echo "<td>" . $hrec_ceb['name'] . "</td>";
+                        echo "<th style='width:20%;'>申請時間：</th>";
+                        echo "<td>" . $application['Time'] . "</td>";
                         echo "</tr>";
 
                         echo "<tr>";
-                        echo "<th>推薦圖書：</th>";
-                        echo "<td>" . $hrec_ceb['book'] . "</td>";
-                        echo "</tr>";
-
-                        echo "<tr> <td>-</td> </tr>";
-                    }
-                    $sql_1 = "SELECT `name`,`video`FROM `hrec_avm` where `situation`='待處理' and `empty`='否' ORDER BY date desc;";
-                    $result = mysqli_query($con, $sql_1);
-                    $num1 = $con->query($sql_1);
-                    if ($num1) {
-                        $total1 = mysqli_num_rows($num1);
-                    }
-                    if ($total1 >= 1) {
-                        echo "<tr> <th style='color:#FF5151'>視聽資料</th> </tr>";
-                    }
-                    while ($hrec_avm = mysqli_fetch_array($result)) {
-                        echo "<tr>";
-                        echo "<th style='width:20%;'>推薦人：</th>";
-                        echo "<td>" . $hrec_avm['name'] . "</td>";
+                        echo "<th style='width:20%;'>申請人：</th>";
+                        echo "<td>" . $application['ApplicantName'] . "</td>";
                         echo "</tr>";
 
                         echo "<tr>";
-                        echo "<th >推薦視聽：</th>";
-                        echo "<td>" . $hrec_avm['video'] . "</td>";
+                        echo "<th>報修物品：</th>";
+                        echo "<td>" . $application['item_name'] . "</td>";
                         echo "</tr>";
 
                         echo "<tr> <td>-</td> </tr>";
-                    }
-                    $sql_2 = "SELECT `name`,`title` FROM `hrec_cj` where `situation`='待處理' and `empty`='否' ORDER BY date desc;";
-                    $result = mysqli_query($con, $sql_2);
-                    $num2 = $con->query($sql_2);
-                    if ($num2) {
-                        $total2 = mysqli_num_rows($num2);
-                    }
-                    if ($total2 >= 1) {
-                        echo "<tr> <th style='color:#FF5151'>中文期刊</th> </tr>";
-                    }
-                    while ($hrec_cj = mysqli_fetch_array($result)) {
-                        echo "<tr>";
-                        echo "<th style='width:20%;'>推薦人：</th>";
-                        echo "<td>" . $hrec_cj['name'] . "</td>";
-                        echo "</tr>";
-
-                        echo "<tr>";
-                        echo "<th >推薦期刊：</th>";
-                        echo "<td>" . $hrec_cj['title'] . "</td>";
-                        echo "</tr>";
-
-                        echo "<tr> <td>-</td> </tr>";
-                    }
-
-                    $all_total = $total + $total1 + $total2;
-                    if ($all_total == 0) {
-                        echo "<tr> <td style='height:450px;text-align: center;'>目前已無待處理書刊</td> </tr>";
                     }
 
                     ?>
@@ -166,14 +132,14 @@ include_once('../mysql_connect.php');
 
         <br><br><br>
 
-        <!-- 書刊推薦類別 -->
+        <!-- 選擇頁面 -->
         <div>
             <p style="text-align:center;">
                 <input type="button" class="bbtn" name="application" value="申請表管理" onclick="location.href='status1.php'" />
             </p>
             <br><br>
             <p style="text-align:center;">
-                <input type="button" class="bbtn" name="item" value="物品清單" onclick="location.href='item1.php'" />
+                <input type="button" class="bbtn" name="item" value="物品清單" onclick="location.href='item_management.php'" />
             </p>
             <br><br>
             <p style="text-align:center;">
