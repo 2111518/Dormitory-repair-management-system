@@ -143,7 +143,7 @@ include_once('../mysql_connect.php');
             </p>
             <br><br>
             <p style="text-align:center;">
-                <input type="button" class="bbtn" name="count" value="統計圖" onclick="location.href='count_rr.php'" />
+                <input type="button" class="bbtn" name="count" value="統計圖" onclick="location.href='count.php'" />
             </p>
         </div>
     </div>
