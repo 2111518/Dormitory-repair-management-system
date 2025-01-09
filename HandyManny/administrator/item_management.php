@@ -65,11 +65,11 @@ require_once("../mysql_connect.php");
             u.innerHTML = updateNO;
             if (count >= 1) {
                 document.getElementById("edit").disabled = false;
-                //document.getElementById("download").disabled=false;
+                document.getElementById("delete").disabled=false;
             }
             else {
                 document.getElementById("edit").disabled = true;
-                //document.getElementById("download").disabled=true;
+                document.getElementById("delete").disabled=true;
             }
 
             //檢查全選框
@@ -100,7 +100,7 @@ require_once("../mysql_connect.php");
             var checkboxs = document.getElementsByName(cName);
             for (var i = 0; i < checkboxs.length; i++) { checkboxs[i].checked = false; }
             document.getElementById("edit").disabled = true;
-            //document.getElementById("download").disabled=true;  
+            document.getElementById("delete").disabled=true;  
         }
 
         //搜尋
@@ -512,7 +512,7 @@ require_once("../mysql_connect.php");
                 <input class="btn" type="button" id="send" value="新增物品" onclick="location.href = 'item_form.php'" />
                 <input disabled="true" class="btn" type="button" id="edit" value="編輯物品狀況"
                     data-bs-target="#exampleModalToggle3" data-bs-toggle="modal" onclick="#">  
-                <input disabled="true" class="btn" type="button" id="edit" value="刪除"
+                <input disabled="true" class="btn" type="button" id="delete" value="刪除"
                         data-bs-target="#exampleModalToggle5" data-bs-toggle="modal" onclick="#">&emsp;
             </p>
         </div>

@@ -86,7 +86,7 @@ include_once('../mysql_connect.php');
     <!-- 路徑欄 -->
     <nav style="--bs-breadcrumb-divider: '>'; margin-left:10px; margin-top:-10px;" aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="reader_index.php"
+            <li class="breadcrumb-item"><a href="student_index.php"
                     style="color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:20px; text-decoration:none; user-select:none;">首頁</a>
             </li>
             <li class="breadcrumb-item active" aria-current="page"
