@@ -140,6 +140,7 @@ require_once("../mysql_connect.php");
         //取得radio值
         function changeState() {
             var state_list = document.getElementsByName("state");
+            var lname = document.getElementsByName("lname");
             var Sno = document.getElementById("update");
             var selected = [];
             for (var i = 0; i < state_list.length; i++) {
@@ -149,7 +150,7 @@ require_once("../mysql_connect.php");
             }
             if (Sno != '' && selected != '') {
                 
-                location.href = "item_management.php?Sno=" + Sno.innerHTML + "&newState=" + selected;
+                location.href = "item_management.php?Sno=" + Sno.innerHTML + "&newState=" + selected+ "&lname=" + lname[0].value;
             }
             else {
                 location.href = "item_management.php";
@@ -292,18 +293,41 @@ require_once("../mysql_connect.php");
                     <tbody>
                         <?php
                         //改變狀態
-                        if (isset($_GET['Sno']) && isset($_GET['newState'])) {
+                        if (isset($_GET['Sno']) && isset($_GET['newState']) && isset($_GET['lname'])) {
                             $Sno_update = $_GET['Sno'];
                             $newState = $_GET['newState'];
+                            $lname = $_GET['lname'];
                             $Sno_array = explode(",", $Sno_update);
                             $count_num = 0;
+                        
+                            // 如果 lname 為空，則不更新 LID
                             foreach ($Sno_array as $i => $value) {
-                                $con->query("UPDATE `item` 
-                                            set `ItemState` = '" . $newState . "'
-                                            where `ItemID` ='" . $value . "';");
-                                $count_num += 1;
+                                if (!empty($lname)) {
+                                    // 查詢 LID
+                                    $result = $con->query("SELECT `LID` FROM `location` WHERE `LName` ='" . $lname . "';");
+                                    if ($result) {
+                                        $row = $result->fetch_assoc(); // 使用 fetch_assoc() 提取查詢結果
+                                        $LID_value = $row['LID']; // 提取 LID
+                                
+                                        // 更新 `item` 表並設定 LID
+                                        $update_query = "UPDATE `item` 
+                                                         SET `ItemState` = '" . $newState . "', `LID` = '" . $LID_value . "' 
+                                                         WHERE `ItemID` = '" . $value . "';";
+                                        $con->query($update_query); // 執行更新
+                                    }
+                                } else {
+                                    // 當 lname 為空時，只更新 ItemState
+                                    $update_query = "UPDATE `item` 
+                                                     SET `ItemState` = '" . $newState . "' 
+                                                     WHERE `ItemID` = '" . $value . "';";
+                                    $con->query($update_query); // 執行更新
+                                }
+                        
+                                $count_num += 1; // 計數更新次數
                             }
+
                         }
+                        
                         // 刪除
                         if (isset($_GET['no'])) {
                             $no_update = $_GET['no'];
@@ -860,6 +884,8 @@ require_once("../mysql_connect.php");
                 <div class="modal-body">
                     <input type="radio" name="state" value="使用中" CHECKED>使用中
                     <input type="radio" name="state" value="備用中">備用中
+                    <br><br>
+                    <input type="text" name="lname" placeholder="請修改物品位置" >
                 </div>
                 <div class="modal-footer">
                     <button style="background-color:#203057; font-size:18px; font-family:DFKai-sb; color:white;
