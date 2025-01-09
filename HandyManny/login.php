@@ -157,7 +157,7 @@ else{
                 <p
                     style="text-align:right; margin-right:35%; color:#203057; font-family:Times New Roman,'DFKai-sb'; font-size:20px;">
                     帳號：
-                    <input type="text" placeholder="學號/悠遊卡證號/身分證字號" name="account" id="account"
+                    <input type="text" placeholder="Account" name="account" id="account"
                         style="padding:3px; width:40%; border-radius:3px; font-size:18px; font-family:Times New Roman, DFKai-sb;"
                         onKeyUp="value=value.replace(/[\W]/g,'') " />
                 </p>
